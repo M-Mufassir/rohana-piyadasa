@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { NfcI } from "./Icons";
 import { P } from "../data";
 
 export default function Splash() {
@@ -20,8 +19,10 @@ export default function Splash() {
             transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.45, ease: "easeOut" }}
           />
         ))}
-        <div className="splash-logo">
-          <NfcI />
+        <div className="splash-logo" aria-hidden>
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M17 16h8.5v11.8h13V16H47v32h-8.5V35.4h-13V48H17V16z" fill="#ffffff" />
+          </svg>
         </div>
       </div>
       <div className="splash-txt">

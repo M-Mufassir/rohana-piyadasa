@@ -6,7 +6,7 @@ import QRModal from "./components/QRModal";
 import HeroPortix from "./components/HeroPortix";
 import ServicesAccordion from "./components/ServicesAccordion";
 import CareerJourney from "./components/CareerJourney";
-import { Reveal } from "./components/Parts";
+import { Reveal, Counter } from "./components/Parts";
 import {
   PhoneI,
   MailI,
@@ -19,7 +19,7 @@ import {
   QrI,
   CopyI,
 } from "./components/Icons";
-import { P, pageUrl } from "./data";
+import { P, ABOUT, STATS, pageUrl } from "./data";
 import { saveVCard } from "./lib/vcard";
 
 const wa = (text = "") =>
@@ -98,13 +98,12 @@ export default function App() {
         {/* Clean Executive Top Header */}
         <header className="top-nav">
           <a href="#" className="brand-lockup" aria-label="HUTCH Enterprise">
-            <img className="brand-logo" src={P.logo} alt="HUTCH" />
-            <span className="brand-divider" aria-hidden />
-            <span className="brand-unit">Enterprise</span>
+            <img className="brand-logo" src={P.logo} alt="HUTCH Enterprise" />
           </a>
 
           <nav className="nav-menu" aria-label="Page navigation">
             <a href="#card">Digital Card</a>
+            <a href="#about">About</a>
             <a href="#services">Solutions</a>
             <a href="#career">Experience</a>
             <a href="#contact">Contact</a>
@@ -124,34 +123,40 @@ export default function App() {
         </header>
 
         <main className="canvas-flow">
-          {/* 1. Open Canvas Hero — Clear Identity + Portrait #1 (Main) */}
+          {/* 1. Compact Home Banner — Layered Portrait #1 + Few Words + Actions */}
           <HeroPortix onSave={save} />
 
-          {/* 2. Open Canvas Interactive 3D NFC Card — Portrait #2 (Card) */}
-          <Reveal id="card" className="canvas-section card-band">
-            <div className="card-band-grid">
-              <div className="card-band-copy">
-                <span className="sec-label">NFC Digital Business Card</span>
-                <h2 className="sec-heading">Interactive Executive Pass</h2>
-                <p>
-                  Drag to rotate or tap the card to flip between executive credentials and your instant QR connection pass for{" "}
-                  <strong>{P.name}</strong> at <strong>{P.company}</strong>.
-                </p>
-                <div className="inline-links">
-                  <button type="button" className="cta-solid sm" onClick={save}>
-                    <UserPlusI width="16" height="16" /> Save to Contacts (.vcf)
-                  </button>
-                  <button type="button" className="cta-line sm" onClick={() => setQr(true)}>
-                    <QrI width="16" height="16" /> Open QR Code
+          {/* 2. Immediate First-Fold 3D NFC Card + Detailed Executive About & Metrics */}
+          <section id="card" className="canvas-section overview-band">
+            <div className="overview-grid">
+              {/* Interactive 3D Card right under the compact Home Banner */}
+              <div className="overview-card-col">
+                <div className="card-stage-head">
+                  <span className="sec-label">Interactive NFC Business Card</span>
+                  <button type="button" className="qr-inline-link" onClick={() => setQr(true)}>
+                    <QrI width="14" height="14" /> Scan QR
                   </button>
                 </div>
-              </div>
-
-              <div className="card-band-stage">
                 <Card3D ready={!splash} />
               </div>
+
+              {/* Detailed About narrative & telecom metrics moved cleanly down here */}
+              <div id="about" className="overview-about-col">
+                <span className="sec-label">Executive Profile</span>
+                <h2 className="sec-heading">Driving Enterprise Telecom Growth</h2>
+                <p className="about-narrative">{ABOUT}</p>
+
+                <div className="exec-metrics">
+                  {STATS.map((s) => (
+                    <div className="metric-col" key={s.label}>
+                      <Counter to={s.value} suffix={s.suffix} />
+                      <span>{s.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </Reveal>
+          </section>
 
           {/* 3. Open Canvas Enterprise Capabilities */}
           <Reveal as="div">

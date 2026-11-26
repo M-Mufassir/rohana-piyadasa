@@ -27,6 +27,9 @@ export const P = {
   url: "", // leave empty to use the live page URL for QR / share / vCard
 };
 
+export const TAGLINE =
+  "Tailored enterprise connectivity, dedicated fiber & corporate telecom partnerships.";
+
 export const ABOUT =
   "With over a decade of experience in the telecommunications industry, I drive enterprise growth through innovative business strategies and strong client relationships — delivering tailored telecom solutions that meet diverse business needs, with customer satisfaction and long-term partnerships at the core.";
 
@@ -81,7 +84,7 @@ export const JOBS = [
     idx: "01",
     role: "Senior Manager Enterprise Business",
     short: "HUTCH SRI LANKA",
-    org: "Hutch Sri Lanka",
+    org: "HUTCH Sri Lanka",
     type: "Full-time · Colombo",
     when: "Jan 2024 – Present",
     now: true,
