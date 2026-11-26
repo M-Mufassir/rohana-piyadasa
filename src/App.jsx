@@ -6,31 +6,24 @@ import QRModal from "./components/QRModal";
 import HeroPortix from "./components/HeroPortix";
 import ServicesAccordion from "./components/ServicesAccordion";
 import CareerJourney from "./components/CareerJourney";
-import { Reveal, Counter } from "./components/Parts";
+import { Reveal } from "./components/Parts";
 import {
   PhoneI,
   MailI,
   WhatsI,
-  SmsI,
   UserPlusI,
   ShareI,
-  ChevI,
-  ArrowRightI,
   PinI,
   InI,
   GlobeI,
   QrI,
-  NfcI,
-  SparkleI,
   CopyI,
 } from "./components/Icons";
-import { P, ABOUT, STATS, pageUrl } from "./data";
+import { P, pageUrl } from "./data";
 import { saveVCard } from "./lib/vcard";
 
 const wa = (text = "") =>
   `https://wa.me/${P.mobile.replace("+", "")}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
-
-const QUICK_TOPICS = ["Dedicated Fiber", "Corporate Mobility", "Enterprise Connectivity", "Custom SLA"];
 
 export default function App() {
   const [splash, setSplash] = useState(true);
@@ -47,7 +40,7 @@ export default function App() {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = setTimeout(() => setSplash(false), reduce ? 180 : 1650);
+    const t = setTimeout(() => setSplash(false), reduce ? 120 : 1050);
     return () => clearTimeout(t);
   }, []);
 
@@ -62,8 +55,8 @@ export default function App() {
 
   const share = async () => {
     const data = {
-      title: P.name,
-      text: `${P.name} · ${P.title} ${P.unit} · ${P.company}`,
+      title: `${P.name} · ${P.company}`,
+      text: `${P.name} — ${P.title}, ${P.unit} at ${P.company}`,
       url: pageUrl(),
     };
     try {
@@ -88,308 +81,246 @@ export default function App() {
 
   const save = async () => {
     await saveVCard();
-    say("Contact card (.vcf) ready to save");
+    say("Contact card (.vcf) downloaded");
   };
 
-  const leadText = `Hello ${P.shortFirst}, I'd like a call back regarding ${lead.topic || "HUTCH Enterprise solutions"}.\nName: ${lead.name || "-"}\nPhone: ${lead.phone || "-"}`;
-  const leadMail = `mailto:${P.email}?subject=${encodeURIComponent("Call back request – HUTCH Enterprise")}&body=${encodeURIComponent(leadText)}`;
+  const leadText = `Hello ${P.shortFirst}, I would like to discuss ${lead.topic || "HUTCH Enterprise solutions"}.\nName: ${lead.name || "-"}\nPhone: ${lead.phone || "-"}`;
+  const leadMail = `mailto:${P.email}?subject=${encodeURIComponent("Enterprise Inquiry – HUTCH Enterprise")}&body=${encodeURIComponent(leadText)}`;
 
   return (
     <>
       <motion.div className="progress" style={{ scaleX: bar }} />
-      <div className="bg-glow" aria-hidden />
-      <div className="grain" aria-hidden />
+      <div className="canvas-ambient" aria-hidden />
 
       <AnimatePresence>{splash && <Splash key="splash" />}</AnimatePresence>
 
-      <div className="page-shell">
-        {/* PORTIX-inspired Top Navigation Bar */}
-        <header className="portix-nav">
-          <a href="#" className="nav-brand" aria-label="HUTCH Enterprise Home">
-            <img className="brand-logo" src={P.logo} alt="HUTCH Enterprise" />
-            <span className="nfc-tag-dot">
-              <NfcI width="13" height="13" /> NFC
-            </span>
+      <div className="canvas-wrap">
+        {/* Clean Executive Top Header */}
+        <header className="top-nav">
+          <a href="#" className="brand-lockup" aria-label="HUTCH Enterprise">
+            <img className="brand-logo" src={P.logo} alt="HUTCH" />
+            <span className="brand-divider" aria-hidden />
+            <span className="brand-unit">Enterprise</span>
           </a>
 
-          <nav className="nav-links" aria-label="Primary sections">
-            <a href="#card">NFC CARD</a>
-            <a href="#services">SOLUTIONS</a>
-            <a href="#career">CAREER</a>
-            <a href="#contact">CONTACT</a>
+          <nav className="nav-menu" aria-label="Page navigation">
+            <a href="#card">Digital Card</a>
+            <a href="#services">Solutions</a>
+            <a href="#career">Experience</a>
+            <a href="#contact">Contact</a>
           </nav>
 
-          <div className="nav-right">
-            <button
-              type="button"
-              className="icon-btn-top"
-              onClick={() => setQr(true)}
-              aria-label="Open QR Code"
-              title="Show QR Code"
-            >
+          <div className="nav-actions">
+            <button type="button" className="nav-icon-btn" onClick={() => setQr(true)} aria-label="Show QR Code">
               <QrI width="17" height="17" />
             </button>
-            <button type="button" className="portix-talk-btn" onClick={() => scrollTo("contact")}>
-              <span className="pt-arrow" aria-hidden>
-                <ArrowRightI width="15" height="15" />
-              </span>
-              <span className="pt-label">LET&apos;S TALK</span>
+            <button type="button" className="nav-icon-btn" onClick={share} aria-label="Share Profile">
+              <ShareI width="17" height="17" />
+            </button>
+            <button type="button" className="nav-cta" onClick={() => scrollTo("contact")}>
+              Get in Touch
             </button>
           </div>
         </header>
 
-        <main className="main-container">
-          {/* 1. PORTIX Hero (Contains Image #1 — Main Portrait) + Scrolling Sparkle Marquee */}
-          <HeroPortix onConnect={() => scrollTo("contact")} />
+        <main className="canvas-flow">
+          {/* 1. Open Canvas Hero — Clear Identity + Portrait #1 (Main) */}
+          <HeroPortix onSave={save} />
 
-          {/* 2. Interactive 3D NFC Digital Card + Executive Overview (Contains Image #2 — Card Portrait) */}
-          <Reveal id="card" className="sec-block">
-            <div className="card-showcase-grid">
-              <div className="card-stage-panel">
-                <div className="panel-top-meta">
-                  <span className="eyebrow-pill">
-                    <NfcI width="13" height="13" /> DIGITAL BUSINESS CARD
-                  </span>
-                  <span className="interactive-tag">360° INTERACTIVE</span>
-                </div>
-
-                <Card3D ready={!splash} />
-
-                <div className="card-quick-actions">
-                  <button type="button" className="btn-primary-sm" onClick={save}>
-                    <UserPlusI width="17" height="17" /> Save Contact
+          {/* 2. Open Canvas Interactive 3D NFC Card — Portrait #2 (Card) */}
+          <Reveal id="card" className="canvas-section card-band">
+            <div className="card-band-grid">
+              <div className="card-band-copy">
+                <span className="sec-label">NFC Digital Business Card</span>
+                <h2 className="sec-heading">Interactive Executive Pass</h2>
+                <p>
+                  Drag to rotate or tap the card to flip between executive credentials and your instant QR connection pass for{" "}
+                  <strong>{P.name}</strong> at <strong>{P.company}</strong>.
+                </p>
+                <div className="inline-links">
+                  <button type="button" className="cta-solid sm" onClick={save}>
+                    <UserPlusI width="16" height="16" /> Save to Contacts (.vcf)
                   </button>
-                  <button type="button" className="btn-ghost-sm" onClick={() => setQr(true)}>
-                    <QrI width="17" height="17" /> QR Code
-                  </button>
-                  <button type="button" className="btn-ghost-sm" onClick={share}>
-                    <ShareI width="17" height="17" /> Share
+                  <button type="button" className="cta-line sm" onClick={() => setQr(true)}>
+                    <QrI width="16" height="16" /> Open QR Code
                   </button>
                 </div>
               </div>
 
-              <div className="about-panel">
-                <div className="eyebrow-pill">
-                  <SparkleI width="12" height="12" /> EXECUTIVE PROFILE
-                </div>
-                <h2 className="sec-title">
-                  Strategic Growth &amp; <span>Trusted Partnerships</span>
-                </h2>
-                <p className="about-copy">{ABOUT}</p>
-
-                <div className="stats-bento">
-                  {STATS.map((s) => (
-                    <div className="stat-tile" key={s.label}>
-                      <Counter to={s.value} suffix={s.suffix} />
-                      <span>{s.label}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="instant-channels">
-                  <a className="ic-chip" href={`tel:${P.mobile}`}>
-                    <PhoneI width="16" height="16" /> Call
-                  </a>
-                  <a className="ic-chip" href={wa()} target="_blank" rel="noopener noreferrer">
-                    <WhatsI width="16" height="16" /> WhatsApp
-                  </a>
-                  <a className="ic-chip" href={`mailto:${P.email}`}>
-                    <MailI width="16" height="16" /> Email
-                  </a>
-                  <a className="ic-chip" href={`sms:${P.mobile}`}>
-                    <SmsI width="16" height="16" /> SMS
-                  </a>
-                </div>
+              <div className="card-band-stage">
+                <Card3D ready={!splash} />
               </div>
             </div>
           </Reveal>
 
-          {/* 3. Reference #2 Interactive Orange Expandable Enterprise Services */}
+          {/* 3. Open Canvas Enterprise Capabilities */}
           <Reveal as="div">
             <ServicesAccordion onInquire={handleInquire} />
           </Reveal>
 
-          {/* 4. New Photo-Free Career & Corporate Journey Section */}
-          <CareerJourney />
+          {/* 4. Open Canvas Photo-Free Career & Organization */}
+          <Reveal as="div">
+            <CareerJourney />
+          </Reveal>
 
-          {/* 5. Direct Contact Channels & Instant Callback Request */}
-          <Reveal id="contact" className="sec-block">
-            <div className="sec-header-row">
-              <div>
-                <div className="eyebrow-pill">
-                  <SparkleI width="12" height="12" /> DIRECT ACCESS
-                </div>
-                <h2 className="sec-title">
-                  Let&apos;s Build Your <span>Next Connection</span>
-                </h2>
-              </div>
-            </div>
+          {/* 5. Open Canvas Direct Contact & Callback */}
+          <Reveal id="contact" className="canvas-section">
+            <div className="contact-split">
+              <div className="contact-direct">
+                <span className="sec-label">Direct Contact</span>
+                <h2 className="sec-heading">Connect with {P.name}</h2>
+                <p className="contact-lead">
+                  Reach out directly for corporate connectivity, dedicated fiber, mobility fleets, or strategic enterprise partnerships.
+                </p>
 
-            <div className="contact-grid">
-              <div className="contact-list-card">
-                <div className="clc-row">
-                  <a className="clc-main" href={`tel:${P.mobile}`}>
-                    <div className="ico"><PhoneI /></div>
-                    <div>
-                      <small>Direct Mobile</small>
-                      <span>{P.mobileFmt}</span>
+                <div className="direct-lines">
+                  <div className="dl-item">
+                    <a href={`tel:${P.mobile}`} className="dl-link">
+                      <PhoneI className="dl-ico" />
+                      <div>
+                        <small>Direct Mobile</small>
+                        <strong>{P.mobileFmt}</strong>
+                      </div>
+                    </a>
+                    <button type="button" className="dl-copy" onClick={() => copyText(P.mobile, "Mobile number")} aria-label="Copy mobile">
+                      <CopyI width="15" height="15" />
+                    </button>
+                  </div>
+
+                  <div className="dl-item">
+                    <a href={`tel:${P.general}`} className="dl-link">
+                      <PhoneI className="dl-ico" />
+                      <div>
+                        <small>Enterprise General Line</small>
+                        <strong>{P.generalFmt}</strong>
+                      </div>
+                    </a>
+                    <button type="button" className="dl-copy" onClick={() => copyText(P.general, "General number")} aria-label="Copy general number">
+                      <CopyI width="15" height="15" />
+                    </button>
+                  </div>
+
+                  <div className="dl-item">
+                    <a href={`mailto:${P.email}`} className="dl-link">
+                      <MailI className="dl-ico" />
+                      <div>
+                        <small>Official Email</small>
+                        <strong className="email-txt">{P.email}</strong>
+                      </div>
+                    </a>
+                    <button type="button" className="dl-copy" onClick={() => copyText(P.email, "Email address")} aria-label="Copy email">
+                      <CopyI width="15" height="15" />
+                    </button>
+                  </div>
+
+                  {P.website && (
+                    <div className="dl-item">
+                      <a href={P.website} target="_blank" rel="noopener noreferrer" className="dl-link">
+                        <GlobeI className="dl-ico" />
+                        <div>
+                          <small>Website</small>
+                          <strong>{P.website.replace(/^https?:\/\//, "")}</strong>
+                        </div>
+                      </a>
                     </div>
-                  </a>
-                  <button
-                    type="button"
-                    className="copy-mini"
-                    onClick={() => copyText(P.mobile, "Mobile number")}
-                    aria-label="Copy mobile number"
-                  >
-                    <CopyI width="15" height="15" />
-                  </button>
-                </div>
+                  )}
 
-                <div className="clc-row">
-                  <a className="clc-main" href={`tel:${P.general}`}>
-                    <div className="ico"><PhoneI /></div>
-                    <div>
-                      <small>Enterprise General Line</small>
-                      <span>{P.generalFmt}</span>
+                  {P.linkedin && (
+                    <div className="dl-item">
+                      <a href={P.linkedin} target="_blank" rel="noopener noreferrer" className="dl-link">
+                        <InI className="dl-ico" />
+                        <div>
+                          <small>LinkedIn</small>
+                          <strong>Executive Profile</strong>
+                        </div>
+                      </a>
                     </div>
-                  </a>
-                  <button
-                    type="button"
-                    className="copy-mini"
-                    onClick={() => copyText(P.general, "General number")}
-                    aria-label="Copy general number"
-                  >
-                    <CopyI width="15" height="15" />
-                  </button>
-                </div>
+                  )}
 
-                <div className="clc-row">
-                  <a className="clc-main" href={`mailto:${P.email}`}>
-                    <div className="ico"><MailI /></div>
-                    <div>
-                      <small>Corporate Email</small>
-                      <span>{P.email}</span>
+                  <div className="dl-item">
+                    <div className="dl-link">
+                      <PinI className="dl-ico" />
+                      <div>
+                        <small>Corporate Office</small>
+                        <strong>{P.company} · {P.location}</strong>
+                      </div>
                     </div>
-                  </a>
-                  <button
-                    type="button"
-                    className="copy-mini"
-                    onClick={() => copyText(P.email, "Email address")}
-                    aria-label="Copy email address"
-                  >
-                    <CopyI width="15" height="15" />
-                  </button>
-                </div>
-
-                {P.website && (
-                  <a className="clc-row link-only" href={P.website} target="_blank" rel="noopener noreferrer">
-                    <div className="ico"><GlobeI /></div>
-                    <div>
-                      <small>Website</small>
-                      <span>{P.website.replace(/^https?:\/\//, "")}</span>
-                    </div>
-                    <ChevI className="go" width="16" height="16" />
-                  </a>
-                )}
-
-                {P.linkedin && (
-                  <a className="clc-row link-only" href={P.linkedin} target="_blank" rel="noopener noreferrer">
-                    <div className="ico"><InI /></div>
-                    <div>
-                      <small>LinkedIn</small>
-                      <span>View Executive Profile</span>
-                    </div>
-                    <ChevI className="go" width="16" height="16" />
-                  </a>
-                )}
-
-                <div className="clc-row static">
-                  <div className="ico"><PinI /></div>
-                  <div>
-                    <small>Office Location</small>
-                    <span>{P.location} · {P.company}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="callback-card">
-                <div className="cb-head">
-                  <h3>Request a Call Back</h3>
-                  <p>Share your details and preferred solution — connect instantly via WhatsApp or Email.</p>
-                </div>
+              <div className="contact-inquiry">
+                <span className="sec-label">Request a Call Back</span>
+                <h3>Send a Quick Brief</h3>
+                <p>Leave your details below to initiate a conversation via WhatsApp or corporate email.</p>
 
-                <div className="topic-chips">
-                  {QUICK_TOPICS.map((t) => (
-                    <button
-                      type="button"
-                      key={t}
-                      className={`t-chip ${lead.topic === t ? "active" : ""}`}
-                      onClick={() => setLead({ ...lead, topic: t })}
-                    >
-                      {t}
-                    </button>
-                  ))}
-                </div>
+                <div className="clean-form">
+                  <label>
+                    <span>Your Name or Company</span>
+                    <input
+                      placeholder="e.g. Kamal Perera · Apex Holdings"
+                      value={lead.name}
+                      onChange={(e) => setLead({ ...lead, name: e.target.value })}
+                      autoComplete="name"
+                    />
+                  </label>
+                  <label>
+                    <span>Phone Number</span>
+                    <input
+                      placeholder="+94 7X XXX XXXX"
+                      inputMode="tel"
+                      value={lead.phone}
+                      onChange={(e) => setLead({ ...lead, phone: e.target.value })}
+                      autoComplete="tel"
+                    />
+                  </label>
+                  <label>
+                    <span>Requirement</span>
+                    <input
+                      placeholder="Dedicated fiber, corporate mobile fleet, enterprise SLA..."
+                      value={lead.topic}
+                      onChange={(e) => setLead({ ...lead, topic: e.target.value })}
+                    />
+                  </label>
 
-                <div className="form-fields">
-                  <input
-                    placeholder="Your name / company"
-                    value={lead.name}
-                    onChange={(e) => setLead({ ...lead, name: e.target.value })}
-                    autoComplete="name"
-                  />
-                  <input
-                    placeholder="Phone number"
-                    inputMode="tel"
-                    value={lead.phone}
-                    onChange={(e) => setLead({ ...lead, phone: e.target.value })}
-                    autoComplete="tel"
-                  />
-                  <input
-                    placeholder="What solution do you need? (e.g. dedicated fiber)"
-                    value={lead.topic}
-                    onChange={(e) => setLead({ ...lead, topic: e.target.value })}
-                  />
-                </div>
-
-                <div className="form-actions">
-                  <a className="btn" href={wa(leadText)} target="_blank" rel="noopener noreferrer">
-                    <WhatsI /> Send via WhatsApp
-                  </a>
-                  <a className="btn ghost-wide" href={leadMail}>
-                    <MailI /> Send Email
-                  </a>
+                  <div className="inquiry-btns">
+                    <a className="cta-solid" href={wa(leadText)} target="_blank" rel="noopener noreferrer">
+                      <WhatsI width="17" height="17" /> Message on WhatsApp
+                    </a>
+                    <a className="cta-line" href={leadMail}>
+                      <MailI width="17" height="17" /> Send Email
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </Reveal>
-
-          <footer className="site-footer">
-            <img className="powered" src={P.poweredBy} alt="Powered by HUTCH Enterprise" />
-            <p>
-              © {new Date().getFullYear()} <strong>{P.company}</strong> · A Member of {P.group}
-            </p>
-            <small>Tap your HUTCH Enterprise NFC card anytime to share this digital profile</small>
-          </footer>
         </main>
+
+        <footer className="canvas-footer">
+          <img className="powered" src={P.poweredBy} alt="Powered by HUTCH Enterprise" />
+          <div className="footer-meta">
+            <span>
+              <strong>{P.name}</strong> · {P.title}, {P.unit}
+            </span>
+            <span>
+              © {new Date().getFullYear()} {P.company} · A Member of {P.group}
+            </span>
+          </div>
+        </footer>
       </div>
 
-      {/* Persistent Mobile & Quick-Action Floating Dock */}
-      <div className="dock">
-        <div className="dock-in">
-          <button type="button" className="btn" onClick={save}>
-            <UserPlusI /> Save Contact
-          </button>
-          <a className="btn ghost" href={wa()} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-            <WhatsI />
-          </a>
-          <button type="button" className="btn ghost" onClick={() => setQr(true)} aria-label="Show QR code">
-            <QrI />
-          </button>
-          <button type="button" className="btn ghost" onClick={share} aria-label="Share profile">
-            <ShareI />
-          </button>
-        </div>
+      {/* Mobile-only Sticky Action Bar for instant NFC Save */}
+      <div className="mobile-bar">
+        <button type="button" className="cta-solid full" onClick={save}>
+          <UserPlusI width="17" height="17" /> Save Contact
+        </button>
+        <a className="bar-icon" href={wa()} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <WhatsI width="18" height="18" />
+        </a>
+        <button type="button" className="bar-icon" onClick={() => setQr(true)} aria-label="QR Code">
+          <QrI width="18" height="18" />
+        </button>
       </div>
 
       <AnimatePresence>

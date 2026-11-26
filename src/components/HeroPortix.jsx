@@ -1,117 +1,79 @@
 import { motion } from "framer-motion";
-import { P, FOCUS } from "../data";
-import { PhoneI, WhatsI, MailI, SparkleI, ArrowUpRightI } from "./Icons";
+import { P, ABOUT, STATS } from "../data";
+import { PhoneI, WhatsI, MailI, UserPlusI } from "./Icons";
+import { Counter } from "./Parts";
 
 const waUrl = () => `https://wa.me/${P.mobile.replace("+", "")}`;
 
-export default function HeroPortix({ onConnect }) {
-  const tickerItems = [...FOCUS, "HUTCH Enterprise", "CK Hutchison Holdings"];
-
+export default function HeroPortix({ onSave }) {
   return (
-    <section className="hero-shell" aria-label="Introduction">
-      <div className="hero-stage">
-        {/* Ambient subtle grid & warm vignette */}
-        <div className="hero-grid-bg" aria-hidden />
+    <section className="hero-canvas" aria-label="Executive Profile">
+      <div className="hero-grid">
+        {/* Left: Unmistakable Executive Identity — Full Name, Role, Company & Direct Actions */}
+        <motion.div
+          className="hero-identity"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease: [0.2, 0.7, 0.2, 1] }}
+        >
+          <div className="org-kicker">
+            <span className="org-dot" aria-hidden />
+            <span>{P.company}</span>
+            <span className="kicker-sep">·</span>
+            <span className="org-sub">A Member of {P.group}</span>
+          </div>
 
-        <div className="hero-split">
-          {/* Left column: PORTIX editorial role eyebrow + high-contrast two-tone statement */}
-          <motion.div
-            className="hero-copy"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, ease: [0.2, 0.7, 0.2, 1], delay: 0.15 }}
-          >
-            <div className="hero-eyebrow">
-              <span className="sq-dot" aria-hidden />
-              <span>{P.title.toUpperCase()} · {P.unit.toUpperCase()}</span>
-            </div>
+          <h1 className="exec-name">{P.name}</h1>
 
-            <h2 className="hero-statement">
-              <span className="bright">CONNECTIVITY</span> THAT EMPOWERS MODERN{" "}
-              <span className="bright-accent">ENTERPRISES</span>
-            </h2>
+          <p className="exec-role">
+            {P.title} <span>— {P.unit}</span>
+          </p>
 
-            <p className="hero-sub">
-              Driving strategic B2B growth at <strong>{P.company}</strong> — delivering dedicated fiber, corporate mobility, and resilient telecom ecosystems across Sri Lanka.
-            </p>
+          <p className="exec-bio">{ABOUT}</p>
 
-            <div className="hero-quick-bar">
-              <a className="hq-pill primary" href={`tel:${P.mobile}`}>
-                <PhoneI /> Call Direct
-              </a>
-              <a className="hq-pill" href={waUrl()} target="_blank" rel="noopener noreferrer">
-                <WhatsI /> WhatsApp
-              </a>
-              <a className="hq-pill" href={`mailto:${P.email}`}>
-                <MailI /> Email
-              </a>
-            </div>
-          </motion.div>
+          <div className="hero-actions">
+            <button type="button" className="cta-solid" onClick={onSave}>
+              <UserPlusI width="18" height="18" /> Save Contact
+            </button>
+            <a className="cta-line" href={`tel:${P.mobile}`}>
+              <PhoneI width="17" height="17" /> Call
+            </a>
+            <a className="cta-line" href={waUrl()} target="_blank" rel="noopener noreferrer">
+              <WhatsI width="17" height="17" /> WhatsApp
+            </a>
+            <a className="cta-line" href={`mailto:${P.email}`}>
+              <MailI width="17" height="17" /> Email
+            </a>
+          </div>
 
-          {/* Right column: PORTIX glowing terracotta orb + single main authentic portrait */}
-          <motion.div
-            className="hero-visual"
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.85, ease: [0.2, 0.7, 0.2, 1], delay: 0.25 }}
-          >
-            <div className="orb-halo" aria-hidden />
-            <div className="orb-circle" aria-hidden />
+          <div className="exec-metrics">
+            {STATS.map((s) => (
+              <div className="metric-col" key={s.label}>
+                <Counter to={s.value} suffix={s.suffix} />
+                <span>{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
 
-            {/* Floating executive credential pills inspired by Reference #2 */}
-            <div className="float-badge fb-left">
-              <strong>10+ Yrs</strong>
-              <span>Telecom Leadership</span>
-            </div>
-            <div className="float-badge fb-right">
-              <span className="live-dot" />
-              <span>Colombo · Sri Lanka</span>
-            </div>
-
+        {/* Right: Single Main Studio Portrait seamlessly integrated into the open canvas */}
+        <motion.div
+          className="hero-portrait-stage"
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.75, ease: [0.2, 0.7, 0.2, 1], delay: 0.1 }}
+        >
+          <div className="studio-orb" aria-hidden />
+          <div className="portrait-fade-wrap">
             <img
-              className="hero-portrait"
+              className="hero-portrait-img"
               src={P.photo}
-              alt={P.name}
+              alt={`${P.name} — ${P.title}, ${P.unit} at ${P.company}`}
               decoding="async"
               fetchPriority="high"
             />
-          </motion.div>
-        </div>
-
-        {/* Bottom spanning giant display name + overlapping circular orange CTA (PORTIX signature) */}
-        <div className="hero-bottom-lockup">
-          <div className="hero-prefix-tag">P.A. · HUTCH ENTERPRISE · CK HUTCHISON GROUP</div>
-
-          <button
-            type="button"
-            className="portix-cta-circle"
-            onClick={onConnect}
-            aria-label="Connect with Rohana Piyadasa"
-          >
-            <span>CONNECT NOW</span>
-            <ArrowUpRightI width="16" height="16" />
-          </button>
-
-          <h1 className="hero-giant-name" aria-label={P.name}>
-            <span>ROHANA</span> <span>PIYADASA</span>
-          </h1>
-        </div>
-      </div>
-
-      {/* Reference #2 signature scrolling sparkle marquee strip */}
-      <div className="marquee-bar" aria-hidden>
-        <div className="marquee-track">
-          {[0, 1].map((dup) => (
-            <div className="marquee-group" key={dup}>
-              {tickerItems.map((item) => (
-                <span className="marquee-item" key={`${dup}-${item}`}>
-                  <SparkleI className="m-star" width="14" height="14" />
-                  {item}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
