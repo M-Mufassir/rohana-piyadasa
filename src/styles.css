@@ -442,9 +442,8 @@ a {
 .hero-portrait {
   position: relative;
   z-index: 2;
-  width: auto;
-  max-width: min(78vw, 370px);
-  max-height: 390px;
+  width: min(82vw, 395px);
+  max-height: 410px;
   height: auto;
   display: block;
   object-fit: contain;
@@ -1715,9 +1714,9 @@ a {
   }
 
   .hero-portrait {
-    max-width: 395px;
+    width: 430px;
     max-height: 465px;
-    transform: translateY(24px);
+    transform: translateY(22px);
   }
 
   .hero-bottom-lockup {

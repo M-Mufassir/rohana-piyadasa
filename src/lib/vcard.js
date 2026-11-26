@@ -14,9 +14,9 @@ async function photoBase64() {
     g.addColorStop(1, "#2a140b");
     x.fillStyle = g;
     x.fillRect(0, 0, s, s);
-    const crop = img.width * 0.68;
+    const crop = img.width * 0.84;
     const sx = (img.width - crop) / 2;
-    x.drawImage(img, sx, 0, crop, crop, 0, 12, s, s);
+    x.drawImage(img, sx, 0, crop, crop, 0, 10, s, s);
     return c.toDataURL("image/jpeg", 0.88).split(",")[1];
   } catch {
     return null;
