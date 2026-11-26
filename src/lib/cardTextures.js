@@ -99,11 +99,11 @@ export function drawFront(ctx, W, H, img, logo) {
   ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
 
   if (img) {
-    // Crop tightly around head & polo collar so face fills the circular frame naturally
-    const cropW = img.width * 0.66;
+    // Frame head, white dress collar, and dark blazer lapels cleanly inside the circle
+    const cropW = img.width * 0.74;
     const sx = (img.width - cropW) / 2;
     const sy = 0;
-    ctx.drawImage(img, sx, sy, cropW, cropW, cx - r, cy - r + 14, r * 2, r * 2);
+    ctx.drawImage(img, sx, sy, cropW, cropW, cx - r, cy - r + 10, r * 2, r * 2);
   } else {
     ctx.fillStyle = "#fff";
     ctx.font = "800 110px Sora, sans-serif";
