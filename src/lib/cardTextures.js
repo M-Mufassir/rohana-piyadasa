@@ -54,40 +54,59 @@ export function drawFront(ctx, W, H, img, logo) {
   }
   ctx.globalAlpha = 1;
 
-  // orange glow behind the portrait
-  g = ctx.createRadialGradient(W * 0.78, H * 0.45, 10, W * 0.78, H * 0.45, W * 0.55);
-  g.addColorStop(0, "rgba(255,106,19,.95)");
-  g.addColorStop(0.4, "rgba(255,106,19,.35)");
+  // round portrait on the right
+  const cx = W - 215, cy = H * 0.5, r = 168;
+  g = ctx.createRadialGradient(cx, cy, 10, cx, cy, W * 0.5);
+  g.addColorStop(0, "rgba(255,106,19,.55)");
   g.addColorStop(1, "rgba(255,106,19,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
 
-  // arc lines
-  ctx.strokeStyle = "rgba(255,255,255,.08)";
+  ctx.strokeStyle = "rgba(255,255,255,.07)";
   ctx.lineWidth = 2;
-  for (let i = 1; i < 7; i++) {
+  for (let i = 1; i < 6; i++) {
     ctx.beginPath();
-    ctx.arc(W * 0.8, H * 0.5, i * 80, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r + 20 + i * 44, 0, Math.PI * 2);
     ctx.stroke();
   }
 
-  // portrait (transparent cut-out)
-  if (img) {
-    const ph = H * 0.94;
-    const pw = (ph * img.width) / img.height;
-    ctx.save();
-    ctx.shadowColor = "rgba(0,0,0,.55)";
-    ctx.shadowBlur = 28;
-    ctx.drawImage(img, W - pw - 6, H - ph + 2, pw, ph);
-    ctx.restore();
-  }
+  // outer thin ring + thick orange ring
+  ctx.strokeStyle = "rgba(255,154,61,.55)";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r + 26, 0, Math.PI * 2);
+  ctx.stroke();
+  g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+  g.addColorStop(0, "#ffb066");
+  g.addColorStop(1, "#ff5a00");
+  ctx.strokeStyle = g;
+  ctx.lineWidth = 11;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r + 9, 0, Math.PI * 2);
+  ctx.stroke();
 
-  // left shade so text stays readable
-  g = ctx.createLinearGradient(0, 0, W * 0.62, 0);
-  g.addColorStop(0, "rgba(8,8,12,.85)");
-  g.addColorStop(1, "rgba(8,8,12,0)");
+  // portrait inside the circle
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clip();
+  g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+  g.addColorStop(0, "#ff8a3d");
+  g.addColorStop(1, "#e8480a");
   ctx.fillStyle = g;
-  ctx.fillRect(0, 0, W * 0.62, H);
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+  if (img) {
+    const sw = img.width * 0.86;
+    const sx = (img.width - sw) / 2;
+    ctx.drawImage(img, sx, 0, sw, sw, cx - r, cy - r + 24, r * 2, r * 2);
+  } else {
+    ctx.fillStyle = "#fff";
+    ctx.font = "800 110px Sora, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("RP", cx, cy + 38);
+    ctx.textAlign = "left";
+  }
+  ctx.restore();
 
   // logo
   if (logo) {

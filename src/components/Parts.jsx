@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
 import { motion, animate, useInView, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
 
-export function Reveal({ children, delay = 0, className = "", as = "section" }) {
+export function Reveal({ children, delay = 0, className = "", as = "section", ...rest }) {
   const reduce = useReducedMotion();
   const M = motion[as];
   return (
     <M
+      {...rest}
       className={className}
       initial={reduce ? false : { opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}

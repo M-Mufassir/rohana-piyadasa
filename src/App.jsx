@@ -4,6 +4,8 @@ import gsap from "gsap";
 import Card3D from "./components/Card3D";
 import Splash from "./components/Splash";
 import QRModal from "./components/QRModal";
+import Poster from "./components/Poster";
+import RoleCards from "./components/RoleCards";
 import { Reveal, Counter, SecHead } from "./components/Parts";
 import { PhoneI, MailI, WhatsI, SmsI, UserPlusI, ShareI, ChevI, PinI, InI, GlobeI, QrI, NfcI } from "./components/Icons";
 import { P, ABOUT, STATS, FOCUS, JOBS, COMPANY_BLURB, pageUrl } from "./data";
@@ -99,6 +101,8 @@ export default function App() {
           <a className="q" href={`sms:${P.mobile}`}><SmsI />SMS</a>
         </div>
 
+        <Poster onBadge={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })} />
+
         <Reveal>
           <SecHead>About</SecHead>
           <div className="glass">
@@ -114,7 +118,7 @@ export default function App() {
           </div>
         </Reveal>
 
-        <Reveal>
+        <Reveal id="contact">
           <SecHead>Contact</SecHead>
           <div className="contact-list">
             <a className="row" href={`tel:${P.mobile}`}>
@@ -171,22 +175,9 @@ export default function App() {
           </div>
         </Reveal>
 
-        <Reveal>
-          <SecHead>Experience</SecHead>
-          <div className="glass">
-            <div className="tl">
-              {JOBS.map((j) => (
-                <div className="job" key={j.role}>
-                  <h3>{j.role}</h3>
-                  <p>{j.org}</p>
-                  <em>
-                    {j.when}
-                    {j.now ? " · Current" : ""}
-                  </em>
-                </div>
-              ))}
-            </div>
-          </div>
+        <Reveal className="career">
+          <SecHead>Career</SecHead>
+          <RoleCards />
         </Reveal>
 
         <Reveal>

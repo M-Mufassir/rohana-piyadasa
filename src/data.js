@@ -46,17 +46,20 @@ export const FOCUS = [
 export const JOBS = [
   {
     role: "Senior Manager Enterprise Business",
+    short: "HUTCH SRI LANKA",
     org: "Hutch Sri Lanka · Full-time",
     when: "Jan 2024 – Present",
     now: true,
   },
   {
     role: "Manager Enterprise Business",
+    short: "HUTCHISON",
     org: "Hutchison Telecommunications Lanka (Pvt) Ltd",
     when: "Hutch · Full-time",
   },
   {
     role: "Business Solutions Manager",
+    short: "MOBITEL",
     org: "Mobitel (Pvt) Ltd · Colombo",
     when: "Aug 2007 – Apr 2014",
   },
