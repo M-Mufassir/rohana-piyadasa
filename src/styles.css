@@ -209,30 +209,116 @@ a {
   border-color: var(--orange);
 }
 
-/* ───────── 1. Open Canvas Hero (Crystal-Clear Name, Title & Company) ───────── */
+/* ───────── 1. Open Canvas Hero (Right-Sided Layered Portrait + Foreground Identity) ───────── */
 .hero-canvas {
-  padding: 44px 0 56px;
+  position: relative;
+  padding: 36px 0 48px;
   border-bottom: 1px solid var(--line);
+  isolation: isolate;
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 36px;
-  align-items: center;
+/* Right-sided layered portrait stage (visible right beside/behind Title & Name on BOTH mobile and desktop) */
+.hero-bg-portrait {
+  position: absolute;
+  top: 4px;
+  right: -22px;
+  width: min(58vw, 290px);
+  height: 315px;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+/* Subtle editorial backdrop panel inspired by Mariana Napolitani reference */
+.hero-arch-panel {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  bottom: 24px;
+  width: 82%;
+  border-radius: 200px 200px 24px 24px;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 106, 19, 0.22) 0%,
+    rgba(255, 106, 19, 0.06) 55%,
+    rgba(9, 9, 13, 0) 100%
+  );
+  border: 1px solid rgba(255, 130, 64, 0.16);
+  z-index: 0;
+}
+
+.studio-orb {
+  position: absolute;
+  right: 8%;
+  top: 10%;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 35%,
+    rgba(255, 106, 19, 0.72) 0%,
+    rgba(196, 66, 22, 0.34) 48%,
+    rgba(255, 106, 19, 0) 74%
+  );
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.hero-portrait-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+  display: block;
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+
+/* Soft directional scrim so left foreground Title, Name & Bio always stay 100% readable */
+.hero-portrait-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, var(--canvas) 0%, rgba(9, 9, 13, 0.58) 34%, rgba(9, 9, 13, 0) 68%),
+    linear-gradient(0deg, var(--canvas) 0%, rgba(9, 9, 13, 0) 32%);
+}
+
+/* Foreground Identity Layer */
+.hero-identity {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-title-zone {
+  min-height: 235px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 36%;
 }
 
 .org-kicker {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--orange-soft);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+}
+
+.org-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .org-dot {
@@ -243,39 +329,46 @@ a {
   flex: none;
 }
 
-.kicker-sep {
-  color: var(--muted);
-}
-
 .org-sub {
   color: var(--muted);
+  font-size: 10px;
   font-weight: 500;
+  letter-spacing: 0.06em;
 }
 
 .exec-name {
-  font-size: clamp(34px, 5.4vw, 58px);
+  font-size: clamp(30px, 7.2vw, 58px);
   font-weight: 800;
-  line-height: 1.08;
+  line-height: 1.06;
   color: #ffffff;
-  overflow-wrap: break-word;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.75);
+}
+
+.exec-name span {
+  display: block;
 }
 
 .exec-role {
   margin-top: 12px;
   font-family: Sora, sans-serif;
-  font-size: clamp(17px, 2.2vw, 22px);
-  font-weight: 600;
+  font-size: clamp(15px, 3.8vw, 22px);
+  line-height: 1.35;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+}
+
+.exec-role strong {
   color: var(--orange);
+  font-weight: 600;
 }
 
 .exec-role span {
-  color: #e2e4ef;
+  color: #e6e8f2;
   font-weight: 500;
 }
 
 .exec-bio {
-  margin-top: 20px;
-  font-size: 15.5px;
+  margin-top: 22px;
+  font-size: 15px;
   line-height: 1.72;
   color: var(--body);
   max-width: 560px;
@@ -359,45 +452,6 @@ a {
   margin-top: 5px;
   font-size: 12px;
   color: var(--muted);
-}
-
-/* Seamless Studio Portrait on the Canvas */
-.hero-portrait-stage {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-.studio-orb {
-  position: absolute;
-  width: min(76vw, 390px);
-  aspect-ratio: 1;
-  top: 8%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 28%,
-    rgba(255, 106, 19, 0.85) 0%,
-    rgba(196, 66, 22, 0.45) 48%,
-    rgba(255, 106, 19, 0) 76%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-.portrait-fade-wrap {
-  position: relative;
-  z-index: 1;
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-}
-
-.hero-portrait-img {
-  width: min(82vw, 430px);
-  height: auto;
-  display: block;
-  object-fit: contain;
-  pointer-events: none;
 }
 
 /* ───────── Shared Continuous Canvas Sections ───────── */
@@ -1096,12 +1150,71 @@ a {
   }
 
   .hero-canvas {
-    padding: 64px 0 72px;
+    padding: 64px 0 68px;
+    min-height: 540px;
+    display: flex;
+    align-items: center;
   }
 
-  .hero-grid {
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 48px;
+  .hero-bg-portrait {
+    top: 16px;
+    bottom: 0;
+    right: -10px;
+    width: min(48%, 500px);
+    height: auto;
+  }
+
+  .hero-arch-panel {
+    right: 20px;
+    top: 18px;
+    bottom: 0;
+    width: 80%;
+    border-radius: 240px 240px 0 0;
+  }
+
+  .hero-portrait-img {
+    mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  }
+
+  .hero-portrait-scrim {
+    background:
+      linear-gradient(90deg, var(--canvas) 0%, rgba(9, 9, 13, 0.35) 24%, rgba(9, 9, 13, 0) 52%),
+      linear-gradient(0deg, var(--canvas) 0%, rgba(9, 9, 13, 0) 18%);
+  }
+
+  .hero-identity {
+    max-width: 60%;
+  }
+
+  .hero-title-zone {
+    min-height: 0;
+    padding-right: 0;
+  }
+
+  .org-kicker {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .org-sub {
+    font-size: 12px;
+  }
+
+  .org-sub::before {
+    content: "· ";
+    margin-right: 4px;
+  }
+
+  .exec-name span {
+    display: inline;
+  }
+
+  .exec-name span:first-child::after {
+    content: " ";
   }
 
   .card-band-grid {
