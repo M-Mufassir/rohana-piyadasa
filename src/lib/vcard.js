@@ -11,12 +11,13 @@ async function photoBase64() {
     const x = c.getContext("2d");
     const g = x.createLinearGradient(0, 0, s, s);
     g.addColorStop(0, "#ff7a26");
-    g.addColorStop(1, "#c93d00");
+    g.addColorStop(1, "#2a140b");
     x.fillStyle = g;
     x.fillRect(0, 0, s, s);
-    // square crop from the top (head & shoulders)
-    x.drawImage(img, 0, 0, img.width, img.width, 0, 0, s, s);
-    return c.toDataURL("image/jpeg", 0.86).split(",")[1];
+    const crop = img.width * 0.68;
+    const sx = (img.width - crop) / 2;
+    x.drawImage(img, sx, 0, crop, crop, 0, 12, s, s);
+    return c.toDataURL("image/jpeg", 0.88).split(",")[1];
   } catch {
     return null;
   }
